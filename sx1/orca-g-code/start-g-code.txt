@@ -19,6 +19,9 @@ G1 X3 Y3 F5000 ; move to corner of the bed to avoid ooze over centre
 M109 S[nozzle_temperature_initial_layer] ; wait for the nozzle to heat up
 M190 S[bed_temperature_initial_layer_single] ; wait for the bed to heat up
 
+@BEDLEVELVISUALIZER
+G29 T; Auto level
+
 ; Return to prime position, Prime line routine
 G92 E0 ; Reset Extruder
 G1 Z3 F3000 ; move z up little to prevent scratching of surface
