@@ -1,0 +1,48 @@
+; Script based on an original created by tjjfvi (https://github.com/tjjfvi)
+; An up-to-date version of the tjjfvi's original script can be found
+; here:  https://csi.t6.fyi/
+; Note - This script will only work in Cura V4.2 and above!
+; --- Global Settings
+; layer_height = {layer_height}
+; smooth_spiralized_contours = {smooth_spiralized_contours}
+; magic_mesh_surface_mode = {magic_mesh_surface_mode}
+; machine_extruder_count = {machine_extruder_count}
+; --- Single Extruder Settings
+; speed_z_hop = {speed_z_hop}
+; retraction_amount = {retraction_amount}
+; retraction_hop = {retraction_hop}
+; retraction_hop_enabled = {retraction_hop_enabled}
+; retraction_enable = {retraction_enable}
+; retraction_speed = {retraction_speed}
+; retraction_retract_speed = {retraction_retract_speed}
+; retraction_prime_speed = {retraction_prime_speed}
+; speed_travel = {speed_travel}
+
+
+@OCTOLAPSE STOP-SNAPSHOTS
+M140 S{material_bed_temperature_layer_0} ; start preheating the bed WITHOUT wait to what is set in Cura
+
+M280 P0 S160 ; BLTouch alarm release
+G4 P100 ; delay for BLTouch
+G28 ; home
+
+M190 S{material_bed_temperature_layer_0} ; start heating the bed to what is set in Cura and WAIT
+M104 S150 ﻿T0 ; start preheating hotend AND wait to what is set in Cura, add ', 0' for print head
+
+@BEDLEVELVISUALIZER
+G29 T; Auto level
+
+G0 Z10.0 F3000 ; move z up little to prevent scratching of surface
+G0 X2 Y20 Z10.0 F5000.0 ; move to on top of start-line position
+G4 P3000; wait for 2 seconds for cleanup
+G0 X2 Y20 Z0.4 F5000.0 ; move to on top of start-line position
+M109 S{material_print_temperature_layer_0} ﻿T0 ; start heating hotend to what is set in Cura and WAIT
+M117 Purge extruder
+G92 E0 ; reset extruder
+G0 X2 Y20 Z0.3 F5000.0 ; move to start-line position
+G1 X2 Y200.0 Z0.3 F1500.0 E15 ; draw 1st line
+G0 X2 Y200.0 Z0.4 F5000.0 ; move to side a little
+G1 X2 Y20 Z0.4 F1500.0 E30 ; draw 2nd line
+G92 E0 ; reset extruder
+G0 Z1.0 F3000 ; move z up little to prevent scratching of surface
+@OCTOLAPSE START-SNAPSHOTS
